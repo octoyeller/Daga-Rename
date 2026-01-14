@@ -14,6 +14,7 @@ bool Is_Supported (const std::string& target_ext) {
 
     std::string target = target_ext.substr(1, 5);
 
+    //TODO: go through docs again and get the full list
     std::unordered_set<std::string> Supported_Files = {
         "JPEG",
         "jpeg",
