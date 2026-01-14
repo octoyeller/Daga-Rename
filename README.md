@@ -1,6 +1,6 @@
 # Daga-Rename
 
-Simple command line tool to rename photos
+Bulk Photo Rename cli tool
 
 The program renames all provided photos to a following format `YYYY-MM-DD_hh-mm-ss_ID.extension`. If there is no creation time in the metadata of the photo, the file will be omitted.
 
