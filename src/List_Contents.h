@@ -13,7 +13,7 @@ void List_Contents (const std::filesystem::path inPath, std::vector<std::filesys
             List_Contents (entry.path(), subdirs);
         }else{
             std::filesystem::path path(entry.path());
-            subdirs.push_back(path);
+            subdirs.emplace_back(path);
         }
 
     }

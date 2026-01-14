@@ -14,6 +14,7 @@ std::string Get_Extension(const std::filesystem::path& dir) {
     int beg = dirProc.length();
     int span = 0;
 
+    //TODO: change to find_last_of is faster
     while (0 < beg && '.' != dirProc[beg]) {
         --beg;
         ++span;
