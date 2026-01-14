@@ -42,14 +42,24 @@ You need the following packages installed:
 - libexiv2-dev (Debian)
 - libexiv2-devel (Fedora / Arch)
 
-To install the program, go to the directory you wish to install it and run the following commands:
+To install locally (preffered) the program, go to the directory you wish to install it and run the following commands:
 ```bash
-git clone https://github.com/NotYourMagicBonkStick/Daga-Rename
+git clone https://github.com/octoyeller/Daga-Rename
 cd Daga-Rename
-make install
+make install-local
 ```
 
-To uninstall simply delete the `Daga-Rename` folder and the alias in the `~/.bash_aliases` file. This program produces no other files and does not clutter your system. The above mentioned are the only directories affected.
+To install the program globally (for all users) run the following:
+
+```bash
+git clone https://github.com/octoyeller/Daga-Rename
+cd Daga-Rename
+sudo make install
+```
+
+The program will be accessible as `daga` for global installations.
+
+To uninstall simply delete the `Daga-Rename` folder and the alias in the `~/.bash_aliases` file. For global installations also delete `/usr/local/bin/daga`. This program produces no other files and does not clutter your system. The above mentioned are the only directories affected.
 
 ---
 
