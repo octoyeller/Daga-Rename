@@ -41,6 +41,7 @@ int main(int argc, char *argv[]) {
 
 
     std::vector <std::string>listOfElements;
+    listOfElements.reserve (argc * 16);
 
 
     // set ID
@@ -49,24 +50,28 @@ int main(int argc, char *argv[]) {
         ID = std::string(argv[1] + 1);
     }else{
         ID = "";
-        listOfElements.push_back(argv[1]); // if first argument is not ID then it is a dir
+        listOfElements.emplace_back(argv[1]); // if first argument is not ID then it is a dir
     }
 
 
     // Push dirs to list
     for (int i = 2; i < argc; ++i) {
-        listOfElements.push_back (argv[i]);
+        listOfElements.emplace_back (argv[i]);
     }
 
 
 
     // Directory discovery
+    unsigned loe_size = listOfElements.size ();
     std::vector <std::filesystem::path>listOfFiles;
+    listOfFiles.reserve (loe_size);
     std::vector <std::filesystem::path>unverified_Support;
-    for (unsigned int i = 0; i < listOfElements.size (); ++i ) {
+    unverified_Support.reserve (loe_size);
+
+    for (unsigned int i = 0; i < loe_size; ++i ) {
 
         if ( false == does_Exist (listOfElements[i]) ) {
-            std::cout << "Omitting inaccessible directory: " << listOfElements[i] << std::endl;
+            std::cout << "Omitting inaccessible directory: " << listOfElements[i] << "\n";
             continue;
         }
 
@@ -74,30 +79,30 @@ int main(int argc, char *argv[]) {
         if (is_Folder (listOfElements[i]) ) {
             List_Contents (std::filesystem::path (listOfElements[i]), unverified_Support);
         }else{
-            unverified_Support.push_back ( std::filesystem::path (listOfElements[i]) );
+            unverified_Support.emplace_back ( std::filesystem::path (listOfElements[i]) );
         }
 
 
         std::cout << "Discovering files: " << unverified_Support.size () << '\r';
 
     }
-    std::cout << std::endl;
 
 
     // Verify support for files
-    for (unsigned int i = 0; i < unverified_Support.size(); ++i) {
+    unsigned us_size = unverified_Support.size ();
+    for (unsigned int i = 0; i < us_size; ++i) {
 
         // Check if given file is supported by the libexiv2-dev library
         if ( false == Is_Supported ( Get_Extension(unverified_Support[i]) ) ) {
-            std::cout << "Omitting unsupported file format: " << unverified_Support[i] << std::endl;
+            std::cout << "Omitting unsupported file format: " << unverified_Support[i] << "\n";
             continue;
         }
 
-        listOfFiles.push_back(unverified_Support[i]);
+        listOfFiles.emplace_back(unverified_Support[i]);
 
     }
     unsigned int numberOfFiles = listOfFiles.size();
-    std::cout << "Found " << numberOfFiles << " media files." << std::endl;
+    std::cout << "Found " << numberOfFiles << " media files.\r";
 
 
 
@@ -112,7 +117,7 @@ int main(int argc, char *argv[]) {
         dateTime[i] = Extract_Date (listOfFiles[i]);
 
         if ("x" == dateTime[i]) {
-            std::cout << "No creation time found: " << listOfFiles[i] << std::endl;
+            std::cout << "No creation time found: " << listOfFiles[i] << "\n";
             continue;
         }
 
@@ -125,7 +130,6 @@ int main(int argc, char *argv[]) {
 
         std::cout << "Fetching time of creation: " << i + 1 << '/' << numberOfFiles << '\r';
     }
-    std::cout << std::endl;
 
 
 
@@ -134,7 +138,7 @@ int main(int argc, char *argv[]) {
 
         // Omit files with no date
         if ("" == newName[i]) {
-            std::cout << "Will not be affected: " << listOfFiles[i] << std::endl;
+            std::cout << "Will not be affected: " << listOfFiles[i] << "\n";
             continue;
         }
 
@@ -143,13 +147,13 @@ int main(int argc, char *argv[]) {
 
         std::filesystem::rename(listOfFiles[i], newDir[i]);
         if (!std::filesystem::exists(newDir[i])) {
-            std::cout << "Failed to rename: " << listOfFiles[i].string() << std::endl;
+            std::cout << "Failed to rename: " << listOfFiles[i].string() << "\n";
             continue;
         }
 
         std::cout << "Processing: " << i + 1 << '/' << numberOfFiles << '\r';
     }
-    std::cout << std::endl << "Done" << std::endl;
+    std::cout << "Done                                  " << std::endl;
 
 
 return 0;}
